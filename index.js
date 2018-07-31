@@ -13,6 +13,9 @@ var https = require('https');
 var semver = require('semver');
 var express = require('express');
 var thunkify = require('thunkify');
+var bodyParser   = require('body-parser');
+const basicAuth = require('express-basic-auth');
+var serveIndex = require('serve-index')
 var exec = require('child_process').exec;
 
 /**
@@ -193,9 +196,18 @@ function matchUpdate(info) {
  * Middleware
  */
 
-app.use(express.bodyParser());
+ app.use(bodyParser.json());
+ app.use(bodyParser.urlencoded({
+   extended: true
+ }));
 
-var auth = express.basicAuth(config.username, config.password);
+var users = {};
+
+users[config.username] = config.password;
+
+var auth = basicAuth({
+  users: users
+  });
 
 /**
  * Normalizes a `req.params` or `req.query` object with the proper default values.
@@ -320,7 +332,7 @@ app.get('/', function(req, res, next) {
  * Static route to get updates
  */
 
-app.use('/static', express.directory(config.directory, { icons: true }));
+app.use('/static', serveIndex(config.directory, { icons: true }));
 app.use('/static', express.static(config.directory));
 
 /**
