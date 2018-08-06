@@ -7,10 +7,10 @@ var fs = require('fs');
 var ms = require('ms');
 var sleep = require('co-wait');
 var http = require('http');
-var dive_ = require('dive');
+var dive_ = require('dive'); //dive recursivly into directories
 var path = require('path');
 var https = require('https');
-var semver = require('semver');
+var semver = require('semver'); //semantic versioning management
 var express = require('express');
 var thunkify = require('thunkify');
 var bodyParser   = require('body-parser');
@@ -36,9 +36,9 @@ function completeVer(ver) {
     return ver + '.0.0';
   } else if (ver.match(/^[0-9]+\.[0-9]+$/)) {
     return ver + '.0';
-  } else {
-    return ver;
   }
+
+  return ver.match(/^[0-9]+\.[0-9]+\.[0-9]+/)[0];
 }
 
 /**
@@ -181,7 +181,7 @@ function matchUpdate(info) {
         update.percentage >= parseFloat(info.percentile) &&
         update.format == info.format) {
       if (match) {
-        if (semver.gt(update.version, match.version)) {
+        if (semver.gt(update.version, match.version)) { //take the last update
           match = update;
         }
       } else {
@@ -206,7 +206,8 @@ var users = {};
 users[config.username] = config.password;
 
 var auth = basicAuth({
-  users: users
+  users: users,
+  challenge: true
   });
 
 /**
@@ -225,6 +226,8 @@ function defaults(info) {
       info.osversion = '5.1';
     } else if (info.os == 'osx') {
       info.osversion = '10.6';
+    }else if (info.os == 'linux') {
+      info.osversion = '4.8';
     }
   }
   if (!info.architecture) {
@@ -232,13 +235,17 @@ function defaults(info) {
       info.architecture = 'x86';
     } else if (info.os == 'osx') {
       info.architecture = 'x86-64';
+    }else if (info.os == 'osx') {
+      info.architecture = 'x64';
     }
   }
   if (!info.format) {
-    if (info.os == 'windows') {
+    if (info.os == 'windows' || info.os == 'linux') {
       info.format = 'zip';
     } else if (info.os == 'osx') {
       info.format = 'gz';
+    }else{
+      info.format = 'zip';
     }
   }
   return info;
@@ -268,11 +275,12 @@ app.get('/update/:architecture/:os/:osversion/:app/:appversion/:channel', functi
 app.get('/update', function(req, res, next) {
   var info = defaults(req.query);
   var update = matchUpdate(info);
+
   res.setHeader("Connection", "close");
   if (update) {
     res.download(update.path, path.basename(update.path));
   } else {
-    res.send(404, "No updates.");
+    res.json({success: false, message: "No updates found"});
   }
 });
 
@@ -285,10 +293,7 @@ app.get('/update.json', function(req, res, next) {
   var update = matchUpdate(info);
   res.setHeader("Connection", "close");
   if (!update) {
-    update = {
-      error: 'No updates.'
-    };
-    res.status(404);
+    res.json({success: false, message: "No updates found"});
   }
   res.send(update);
 });
@@ -316,7 +321,7 @@ app.post('/upload', auth, function(req, res, next) {
  */
 
 app.post('/reload', auth, function(req, res, next) {
-  res.send(202);
+  res.sendStatus(202);
   co(loadUpdates)();
 });
 
@@ -325,14 +330,14 @@ app.post('/reload', auth, function(req, res, next) {
  */
 
 app.get('/', function(req, res, next) {
-  res.send(200);
+  res.sendStatus(200);
 });
 
 /**
  * Static route to get updates
  */
 
-app.use('/static', serveIndex(config.directory, { icons: true }));
+app.use('/static', auth, serveIndex(config.directory, { icons: true }));
 app.use('/static', express.static(config.directory));
 
 /**
