@@ -13,10 +13,11 @@ var https = require('https');
 var semver = require('semver'); //semantic versioning management
 var express = require('express');
 var thunkify = require('thunkify');
-var bodyParser   = require('body-parser');
-const basicAuth = require('express-basic-auth');
+var bodyParser   = require('body-parser'); //express bodyparser
+const basicAuth = require('express-basic-auth'); // express basicAuth
 var serveIndex = require('serve-index')
 var exec = require('child_process').exec;
+var helmet = require('helmet');
 
 /**
  * Config
@@ -195,7 +196,7 @@ function matchUpdate(info) {
 /**
  * Middleware
  */
-
+ app.use(helmet());
  app.use(bodyParser.json());
  app.use(bodyParser.urlencoded({
    extended: true

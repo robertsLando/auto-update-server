@@ -32,7 +32,7 @@ The latest version is determined using [semver](http://semver.org/).
 Parameters:
 
 * `app=MyApp`
-* `os=osx` 
+* `os=osx`
 
 Resulting route:
 
@@ -43,8 +43,8 @@ Resulting route:
 Parameters:
 
 * `app=MyApp`
-* `os=windows` 
-* `osversion=6.0` 
+* `os=windows`
+* `osversion=6.0`
 * `architecture=x86-64`
 
 Resulting route:
@@ -57,7 +57,7 @@ Parameters:
 
 * `app=MyApp`
 * `appversion=5.1.0`
-* `os=osx` 
+* `os=osx`
 * `channel=beta`
 
 Resulting route:
@@ -128,7 +128,7 @@ Updates are specified via `.json` files, with the following overall format:
 }
 ```
 
-The JSON above specifies that **MyApp** version **1.5.0** build **300**, is available on the **release** channel. Two files are available for this update: 
+The JSON above specifies that **MyApp** version **1.5.0** build **300**, is available on the **release** channel. Two files are available for this update:
 
 * One for users running **OS X**, **Snow Leopard (10.6)** or newer, in **gz** format, stored as **MyApp-1.5.0-300-osx.tar.gz**;
 * Other for users running **Windows**, **XP (5.1)** or newer, in **zip** format, stored in **MyApp-1.5.0-300-windows.zip**.
@@ -231,30 +231,6 @@ The following is a possible/suggested release procedure, using percentage update
 * [@TooTallNate](https://github.com/TooTallNate)
 * [@coreh](https://github.com/coreh)
 * [@guille](https://github.com/guille)
-
-## License
-
-The MIT License (MIT)
-
-Copyright (c) 2014 Automattic, Inc.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
 
 ## Reference Sheet
 

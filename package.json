@@ -16,6 +16,7 @@
     "express": "^4.16.3",
     "express-basic-auth": "^1.1.5",
     "gnode": "0.1.2",
+    "helmet": "^3.13.0",
     "ms": "0.7.1",
     "semver": "5.x",
     "serve-index": "^1.9.1",
