@@ -236,7 +236,7 @@ function defaults(info) {
       info.architecture = 'x86';
     } else if (info.os == 'osx') {
       info.architecture = 'x86-64';
-    }else if (info.os == 'osx') {
+    }else if (info.os == 'linux') {
       info.architecture = 'x64';
     }
   }
@@ -263,7 +263,7 @@ app.get('/update/:architecture/:os/:osversion/:app/:appversion/:channel', functi
   if (update) {
     res.download(update.path, path.basename(update.path));
   } else {
-    res.send(404, "No updates.");
+    res.json({success: false, message: "No updates found"});
   }
 });
 
